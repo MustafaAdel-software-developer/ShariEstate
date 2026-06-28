@@ -1,0 +1,14 @@
+node_modules
+.next
+.turbo
+dist
+.git
+apps/web
+coverage
+uploads
+*.log
+.env
+.env.local
+.env.*.local
+!.env.example
+!.env.production.example

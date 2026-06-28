@@ -1,12 +1,11 @@
 # ShariEstate API — Railway config
-# Docs: https://docs.railway.com/reference/config-as-code
+# Uses Dockerfile to avoid Nixpacks building the whole monorepo (Next.js + pnpm script issues)
 
 [build]
-builder = "nixpacks"
-buildCommand = "bash scripts/railway-build.sh"
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "bash scripts/railway-start.sh"
 healthcheckPath = "/api/v1/health"
 healthcheckTimeout = 120
 restartPolicyType = "ON_FAILURE"
