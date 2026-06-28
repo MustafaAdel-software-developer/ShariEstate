@@ -100,14 +100,12 @@ Use this if Render asks for a credit card.
 1. [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub** → `ShariEstate`
 2. Rename service to `shari-estate-api`
 3. **Settings** → **Source** → **Root Directory:** leave **empty** (repo root)
-4. **Settings** → **Build** → confirm it uses `railway.toml` (or set manually):
+4. **Settings** → **Build** — leave **Build Command empty** (Dockerfile handles it)
 
-| Setting | Value |
-|---------|--------|
-| **Build Command** | `bash scripts/railway-build.sh` |
-| **Start Command** | `bash scripts/railway-start.sh` |
+5. **Settings** → **Deploy** → **Start Command** — set to **`node dist/main.js`** or leave **empty** (uses Dockerfile `CMD`).  
+   **Do not use** `bash scripts/railway-start.sh` — that file is not in the Docker image.
 
-5. **Variables** tab — add:
+6. **Variables** tab — add:
 
 | Variable | Value |
 |----------|--------|
@@ -126,6 +124,24 @@ Use this if Render asks for a credit card.
 **Test:** `https://YOUR-RAILWAY-DOMAIN/api/v1/geo/states`
 
 > Push `railway.toml` to GitHub first: `git add railway.toml scripts/railway-*.sh && git commit && git push`
+
+### Railway: `Can't reach database server` (P1001)
+
+1. **Neon console** → open project → ensure compute shows **Active** (free tier sleeps when idle)
+2. **Railway → Variables → `DATABASE_URL`** — copy fresh from Neon **Connect**:
+   - Turn **Connection pooling OFF** (direct URL, no `-pooler`)
+   - Include only: `?sslmode=require`
+   - **Remove** `channel_binding=require` if present
+3. Example shape:
+   ```
+   postgresql://neondb_owner:PASSWORD@ep-long-sky-atff8495.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require
+   ```
+4. Redeploy after saving variables
+
+### Railway: `railway-start.sh: No such file or directory`
+
+- **Settings → Deploy → Start Command** must be `node dist/main.js` or **empty**
+- Remove `bash scripts/railway-start.sh` (old config; not copied into Docker image)
 
 ### Railway build failed?
 
