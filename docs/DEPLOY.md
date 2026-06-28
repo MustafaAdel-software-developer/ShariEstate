@@ -153,14 +153,16 @@ Use this if Render asks for a credit card.
 
 ## Step 4 — Deploy web on Vercel
 
-1. [vercel.com/new](https://vercel.com/new) → Import Git Repository → select `shari-estate`
-2. Configure project:
+1. [vercel.com/new](https://vercel.com/new) → Import Git Repository → select `ShariEstate`
+2. **Important — Configure project:**
 
 | Setting | Value |
 |---------|--------|
-| **Root Directory** | `apps/web` |
-| **Framework** | Next.js (auto-detected) |
-| **Build Command** | (leave default — uses `apps/web/vercel.json`) |
+| **Project name** | `shari-estate` (lowercase only) |
+| **Root Directory** | **`apps/web`** ← required; edit → set to `apps/web` |
+| **Framework** | Next.js |
+
+> If Root Directory is wrong, Vercel runs `pnpm run build` from the repo root and tries to build the **API** too — that fails. Only `apps/web` should build on Vercel.
 
 3. **Environment Variables:**
 
@@ -221,7 +223,13 @@ Save → Render will redeploy automatically.
 - Confirm `NEXT_PUBLIC_API_URL` on Vercel points to live Render API
 - Confirm `RUN_SEED=true` was run once
 
-### Build fails on Vercel
+### Build fails on Vercel (`@real-estate/api#build` / 13 errors)
+
+- **Root Directory must be `apps/web`** (Settings → General → Root Directory)
+- Do not use root `pnpm run build` — that builds the NestJS API on Vercel
+- Redeploy after changing Root Directory
+
+### Build fails on Vercel (other)
 - Root Directory must be `apps/web`
 - Node 20+ (set in Vercel → Settings → Node.js Version)
 
