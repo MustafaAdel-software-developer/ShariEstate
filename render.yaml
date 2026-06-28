@@ -1,0 +1,45 @@
+# Render Blueprint — ShariEstate API (free tier)
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Setup:
+# 1. Push this repo to GitHub
+# 2. Render Dashboard → New → Blueprint → connect repo
+# 3. Create a free PostgreSQL database on Neon (https://neon.tech) and set DATABASE_URL
+# 4. After Vercel deploy, set CORS_ORIGIN + WEB_URL to your Vercel URL
+# 5. Set PUBLIC_URL to this service URL (e.g. https://shari-estate-api.onrender.com)
+# 6. One-time: set RUN_SEED=true, redeploy, then set RUN_SEED=false
+
+services:
+  - type: web
+    name: shari-estate-api
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: bash scripts/render-build.sh
+    startCommand: bash scripts/render-start.sh
+    healthCheckPath: /api/v1/geo/states
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 15m
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      - key: CORS_ORIGIN
+        sync: false
+      - key: WEB_URL
+        sync: false
+      - key: PUBLIC_URL
+        sync: false
+      - key: UPLOAD_DIR
+        value: ./uploads
+      - key: DISABLE_SAVED_SEARCH_CRON
+        value: "true"
+      - key: RUN_SEED
+        value: "false"

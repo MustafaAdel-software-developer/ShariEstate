@@ -1,0 +1,27 @@
+{
+  "name": "shari-estate",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "build:web": "turbo build --filter=@real-estate/web",
+    "build:api": "turbo build --filter=@real-estate/api",
+    "lint": "turbo lint",
+    "db:generate": "pnpm --filter @real-estate/api run db:generate",
+    "db:push": "pnpm --filter @real-estate/api run db:push",
+    "db:migrate": "pnpm --filter @real-estate/api run db:migrate",
+    "db:seed": "pnpm --filter @real-estate/api run db:seed",
+    "db:studio": "pnpm --filter @real-estate/api run db:studio"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3"
+  },
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["@prisma/client", "@prisma/engines", "prisma", "bcrypt"]
+  }
+}
