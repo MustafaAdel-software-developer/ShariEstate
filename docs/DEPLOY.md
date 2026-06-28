@@ -91,6 +91,50 @@ Swagger: `https://YOUR-API.onrender.com/api/docs`
 
 ---
 
+## Alternative: Deploy API on Railway (no Render card)
+
+Use this if Render asks for a credit card.
+
+### Railway setup
+
+1. [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub** → `ShariEstate`
+2. Rename service to `shari-estate-api`
+3. **Settings** → **Source** → **Root Directory:** leave **empty** (repo root)
+4. **Settings** → **Build** → confirm it uses `railway.toml` (or set manually):
+
+| Setting | Value |
+|---------|--------|
+| **Build Command** | `bash scripts/railway-build.sh` |
+| **Start Command** | `bash scripts/railway-start.sh` |
+
+5. **Variables** tab — add:
+
+| Variable | Value |
+|----------|--------|
+| `DATABASE_URL` | Neon **pooled** URL |
+| `JWT_SECRET` | long random string |
+| `JWT_REFRESH_SECRET` | long random string |
+| `CORS_ORIGIN` | your Vercel URL (or `http://localhost:3000` for now) |
+| `WEB_URL` | same as `CORS_ORIGIN` |
+| `PUBLIC_URL` | Railway public URL (e.g. `https://shari-estate-api-production.up.railway.app`) |
+| `DISABLE_SAVED_SEARCH_CRON` | `true` |
+| `PORT` | `3001` (optional — Railway sets `PORT` automatically) |
+
+6. **Settings** → **Networking** → **Generate Domain**
+7. **Deploy** → check **Logs** if build fails
+
+**Test:** `https://YOUR-RAILWAY-DOMAIN/api/v1/geo/states`
+
+> Push `railway.toml` to GitHub first: `git add railway.toml scripts/railway-*.sh && git commit && git push`
+
+### Railway build failed?
+
+- Do **not** use default `pnpm run build` — it builds Next.js too and often fails
+- Use `bash scripts/railway-build.sh` (API + shared only)
+- Ensure `DATABASE_URL` is set before deploy (Prisma needs it at runtime)
+
+---
+
 ## Step 4 — Deploy web on Vercel
 
 1. [vercel.com/new](https://vercel.com/new) → Import Git Repository → select `shari-estate`
