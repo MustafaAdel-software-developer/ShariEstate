@@ -20,6 +20,7 @@ import { AdminModule } from './admin/admin.module';
 import { JobsModule } from './jobs/jobs.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
+import { HealthController } from './health.controller';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     AdminModule,
     JobsModule,
   ],
+  controllers: [HealthController],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },

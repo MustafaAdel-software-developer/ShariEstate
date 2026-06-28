@@ -35,9 +35,13 @@ async function bootstrap() {
     .build();
   SwaggerModule.setup('api/docs', app, SwaggerModule.createDocument(app, config));
 
-  const port = process.env.PORT || 3001;
-  await app.listen(port);
-  console.log(`API running on http://localhost:${port}`);
-  console.log(`Swagger docs at http://localhost:${port}/api/docs`);
+  const port = Number(process.env.PORT) || 3001;
+  await app.listen(port, '0.0.0.0');
+  console.log(`API running on port ${port}`);
+  console.log(`Health check: http://0.0.0.0:${port}/api/v1/health`);
+  console.log(`Swagger docs at http://0.0.0.0:${port}/api/docs`);
 }
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('Failed to start API:', err);
+  process.exit(1);
+});
